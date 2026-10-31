@@ -8,7 +8,6 @@
 
     <!-- 2. Quyền sử dụng Camera để quét mã QR nguồn gốc nông sản -->
     <uses-permission android:name="android.permission.CAMERA" />
-    <!-- Khai báo phần cứng Camera, đặt required="false" để máy không có camera sau vẫn cài đặt được -->
     <uses-feature
         android:name="android.hardware.camera"
         android:required="false" />
@@ -17,7 +16,9 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
+    <!-- Kích hoạt AgriCleanApplication để bật bộ nhớ đệm Firestore Offline -->
     <application
+        android:name=".AgriCleanApplication"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -27,9 +28,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AGriClean">
 
-        <!-- Màn hình khởi chạy chính của ứng dụng -->
+        <!-- Màn hình Đăng nhập (Điểm khởi chạy ứng dụng) -->
         <activity
-            android:name=".MainActivity"
+            android:name=".ui.auth.DangNhapActivity"
             android:exported="true"
             android:windowSoftInputMode="adjustResize">
             <intent-filter>
@@ -37,6 +38,16 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <!-- Màn hình Đăng ký -->
+        <activity
+            android:name=".ui.auth.DangKyActivity"
+            android:exported="false" />
+
+        <!-- Màn hình chính sau khi đăng nhập thành công -->
+        <activity
+            android:name=".MainActivity"
+            android:exported="false" />
 
         <!-- Màn hình quản lý Giỏ hàng nông sản -->
         <activity
