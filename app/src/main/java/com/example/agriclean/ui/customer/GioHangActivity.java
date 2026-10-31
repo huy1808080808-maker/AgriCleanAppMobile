@@ -1,120 +1,149 @@
 package com.example.agriclean.ui.customer;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Toast;
 
-import androidx.activity.result.ActivityResultLauncher;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.example.agriclean.data.local.GioHangItem;
 import com.example.agriclean.databinding.ActivityGioHangBinding;
-import com.example.agriclean.utils.BanDoHelper;
-import com.example.agriclean.utils.QuetQRHelper;
 import com.example.agriclean.viewmodel.GioHangViewModel;
-import com.journeyapps.barcodescanner.ScanContract;
-import com.journeyapps.barcodescanner.ScanIntentResult;
-import com.journeyapps.barcodescanner.ScanOptions;
 
-import java.text.NumberFormat;
-import java.util.Locale;
+import java.text.DecimalFormat;
+import java.util.List;
 
 /**
- * Lớp GioHangActivity: Màn hình giao diện Giỏ hàng nông sản.
- * - Áp dụng ViewBinding: ActivityGioHangBinding.
- * - Kiến trúc MVVM: Lắng nghe LiveData từ GioHangViewModel.
- * - Tích hợp Quét QR Camera (ZXing).
- * - Tích hợp mở bản đồ nông trại (Google Maps Intent).
+ * Màn hình Giỏ Hàng Nông Sản Sạch (UC10, UC11 - Bước 5):
+ * - Lưu trữ và quản lý hoàn toàn Offline bằng Room Database (NFR04).
+ * - Tự động cập nhật số lượng và tính toán tổng tiền thanh toán theo thời gian thực (Realtime).
+ * - Hộp thoại xác nhận an toàn khi xóa sản phẩm hoặc làm trống giỏ hàng.
+ * - Sẵn sàng chuyển tiếp sang luồng Đặt hàng & Thanh toán (UC12 - Bước 6).
  */
-public class GioHangActivity extends AppCompatActivity {
+public class GioHangActivity extends AppCompatActivity implements GioHangAdapter.OnGioHangItemListener {
 
-    // ViewBinding liên kết trực tiếp với layout activity_gio_hang.xml
     private ActivityGioHangBinding binding;
-
-    // ViewModel xử lý logic dữ liệu giỏ hàng
     private GioHangViewModel gioHangViewModel;
+    private GioHangAdapter adapter;
+    private final DecimalFormat formatter = new DecimalFormat("#,###");
 
-    // Trình đăng ký nhận kết quả sau khi quét mã QR
-    private final ActivityResultLauncher<ScanOptions> trinhQuetQR =
-            registerForActivityResult(new ScanContract(), (ScanIntentResult result) -> {
-                if (result.getContents() != null) {
-                    String maQuetDuoc = result.getContents();
-                    Toast.makeText(this, "Quét thành công! Mã nông sản: " + maQuetDuoc, Toast.LENGTH_LONG).show();
-                    // Tại đây có thể truy vấn Firestore để hiển thị nguồn gốc nông sản
-                } else {
-                    Toast.makeText(this, "Đã hủy quét mã QR", Toast.LENGTH_SHORT).show();
-                }
-            });
+    private List<GioHangItem> danhSachHienTai;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        // 1. Khởi tạo ViewBinding
         binding = ActivityGioHangBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        // 2. Khởi tạo ViewModel qua ViewModelProvider
+        // 1. Khởi tạo ViewModel
         gioHangViewModel = new ViewModelProvider(this).get(GioHangViewModel.class);
 
-        // 3. Cài đặt các sự kiện bấm nút
-        caiDatGiaoDien();
+        // 2. Cài đặt RecyclerView và Adapter
+        caiDatRecyclerView();
 
-        // 4. Lắng nghe thay đổi dữ liệu từ ViewModel
-        langNgheDuLieu();
+        // 3. Cài đặt các sự kiện nút bấm giao diện
+        caiDatSuKien();
+
+        // 4. Lắng nghe LiveData từ Room Database
+        quanSatDuLieu();
     }
 
-    /**
-     * Cài đặt các sự kiện tương tác của người dùng trên giao diện
-     */
-    private void caiDatGiaoDien() {
-        // Nút Xóa tất cả sản phẩm khỏi giỏ
-        binding.btnXoaHet.setOnClickListener(v -> {
-            gioHangViewModel.xoaToanBoGioHang();
-            Toast.makeText(this, "Đã dọn sạch giỏ hàng", Toast.LENGTH_SHORT).show();
-        });
+    private void caiDatRecyclerView() {
+        adapter = new GioHangAdapter(this, this);
+        binding.rvDanhSachGioHang.setLayoutManager(new LinearLayoutManager(this));
+        binding.rvDanhSachGioHang.setAdapter(adapter);
+    }
 
-        // Nút Mở camera quét mã QR kiểm tra nguồn gốc
-        binding.btnQuetQR.setOnClickListener(v -> {
-            QuetQRHelper.batDauQuetQR(trinhQuetQR, "Hướng camera vào mã QR trên bao bì nông sản");
-        });
+    private void caiDatSuKien() {
+        // Nút quay lại
+        binding.btnBack.setOnClickListener(v -> finish());
 
-        // Nút Mở Google Maps xem vị trí nông trại sản xuất
-        binding.btnXemTrangTrai.setOnClickListener(v -> {
-            // Tọa độ demo nông trại (Đà Lạt: 11.9404, 108.4583)
-            BanDoHelper.moViTriTrangTrai(
-                    this,
-                    11.9404,
-                    108.4583,
-                    "Hợp tác xã Nông sản Sạch Đà Lạt"
-            );
-        });
+        // Nút tiếp tục mua sắm khi giỏ hàng trống
+        binding.btnTiepTucMuaSam.setOnClickListener(v -> finish());
 
-        // Nút Đặt hàng
+        // Nút xóa tất cả sản phẩm khỏi giỏ hàng
+        binding.btnXoaHet.setOnClickListener(v -> hienThiDialogXoaTatCa());
+
+        // Nút Tiến hành đặt hàng (UC12)
         binding.btnDatHang.setOnClickListener(v -> {
-            Toast.makeText(this, "Chuyển sang màn hình xác nhận đơn hàng...", Toast.LENGTH_SHORT).show();
+            if (danhSachHienTai != null && !danhSachHienTai.isEmpty()) {
+                Intent intent = new Intent(GioHangActivity.this, DatHangActivity.class);
+                startActivity(intent);
+            }
         });
     }
 
-    /**
-     * Lắng nghe LiveData từ ViewModel để cập nhật giao diện tự động khi dữ liệu thay đổi
-     */
-    private void langNgheDuLieu() {
+    private void quanSatDuLieu() {
         gioHangViewModel.getDanhSachGioHang().observe(this, danhSach -> {
-            double tongTien = 0.0;
-            if (danhSach != null) {
+            this.danhSachHienTai = danhSach;
+            adapter.capNhatDanhSach(danhSach);
+
+            boolean coHang = danhSach != null && !danhSach.isEmpty();
+
+            // Hiển thị/Ẩn giao diện giỏ hàng trống
+            binding.layoutGioHangTrong.setVisibility(coHang ? View.GONE : View.VISIBLE);
+            binding.rvDanhSachGioHang.setVisibility(coHang ? View.VISIBLE : View.GONE);
+            binding.layoutBottomBar.setVisibility(coHang ? View.VISIBLE : View.GONE);
+            binding.btnXoaHet.setVisibility(coHang ? View.VISIBLE : View.GONE);
+
+            // Tính toán tổng số tiền thanh toán
+            if (coHang) {
+                double tongTien = 0.0;
                 for (GioHangItem item : danhSach) {
-                    tongTien += item.getGiaBan() * item.getSoLuong();
+                    tongTien += (item.getGiaBan() * item.getSoLuong());
                 }
+                binding.tvTongTien.setText(formatter.format(tongTien) + " đ");
             }
-
-            // Định dạng tiền tệ theo chuẩn Việt Nam (VND)
-            NumberFormat dinhDangTien = NumberFormat.getCurrencyInstance(new Locale("vi", "VN"));
-            binding.tvTongTien.setText("Tổng: " + dinhDangTien.format(tongTien));
-
-            // Kích hoạt hoặc vô hiệu hóa nút Đặt hàng nếu giỏ hàng trống
-            binding.btnDatHang.setEnabled(danhSach != null && !danhSach.isEmpty());
         });
+    }
+
+    // --- Xử lý sự kiện từ GioHangAdapter ---
+
+    @Override
+    public void onTangSoLuong(GioHangItem item) {
+        gioHangViewModel.capNhatSoLuong(item.getMaSanPham(), item.getSoLuong() + 1);
+    }
+
+    @Override
+    public void onGiamSoLuong(GioHangItem item) {
+        if (item.getSoLuong() > 1) {
+            gioHangViewModel.capNhatSoLuong(item.getMaSanPham(), item.getSoLuong() - 1);
+        } else {
+            // Khi số lượng về 1 và bấm giảm -> Hỏi xác nhận xóa
+            hienThiDialogXoaItem(item);
+        }
+    }
+
+    @Override
+    public void onXoaItem(GioHangItem item) {
+        hienThiDialogXoaItem(item);
+    }
+
+    private void hienThiDialogXoaItem(GioHangItem item) {
+        new AlertDialog.Builder(this)
+                .setTitle("Xóa khỏi giỏ hàng")
+                .setMessage("Bạn có chắc chắn muốn bỏ \"" + item.getTenSanPham() + "\" khỏi giỏ hàng?")
+                .setPositiveButton("Xóa", (dialog, which) -> {
+                    gioHangViewModel.xoaKhoiGio(item);
+                    Toast.makeText(this, "Đã xóa sản phẩm", Toast.LENGTH_SHORT).show();
+                })
+                .setNegativeButton("Hủy", null)
+                .show();
+    }
+
+    private void hienThiDialogXoaTatCa() {
+        new AlertDialog.Builder(this)
+                .setTitle("Làm trống giỏ hàng")
+                .setMessage("Bạn có chắc chắn muốn xóa tất cả sản phẩm trong giỏ hàng?")
+                .setPositiveButton("Xóa tất cả", (dialog, which) -> {
+                    gioHangViewModel.xoaToanBoGioHang();
+                    Toast.makeText(this, "Đã dọn sạch giỏ hàng", Toast.LENGTH_SHORT).show();
+                })
+                .setNegativeButton("Hủy", null)
+                .show();
     }
 }
-

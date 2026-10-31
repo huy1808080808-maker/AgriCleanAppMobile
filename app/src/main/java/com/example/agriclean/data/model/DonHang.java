@@ -16,13 +16,15 @@ public class DonHang implements Serializable {
     private String trangThaiDon; // "Chờ duyệt", "Đã xác nhận", "Đang giao", "Hoàn thành", "Đã huỷ"
     private Timestamp ngayDatHang;
     private List<ChiTietDonHang> danhSachChiTiet = new ArrayList<>();
+    private String phuongThucThanhToan; // "COD", "Chuyển khoản ngân hàng / Quét QR"
+    private String ghiChu;
 
     public DonHang() {
     }
 
     public DonHang(String maDonHang, String maKhachHang, String tenNguoiNhan, String soDienThoaiNhan,
                    String diaChiGiaoHang, double tongTien, String trangThaiDon, Timestamp ngayDatHang,
-                   List<ChiTietDonHang> danhSachChiTiet) {
+                   List<ChiTietDonHang> danhSachChiTiet, String phuongThucThanhToan, String ghiChu) {
         this.maDonHang = maDonHang;
         this.maKhachHang = maKhachHang;
         this.tenNguoiNhan = tenNguoiNhan;
@@ -32,6 +34,8 @@ public class DonHang implements Serializable {
         this.trangThaiDon = trangThaiDon;
         this.ngayDatHang = ngayDatHang;
         this.danhSachChiTiet = danhSachChiTiet != null ? danhSachChiTiet : new ArrayList<>();
+        this.phuongThucThanhToan = phuongThucThanhToan;
+        this.ghiChu = ghiChu;
     }
 
     public String getMaDonHang() { return maDonHang; }
@@ -60,4 +64,10 @@ public class DonHang implements Serializable {
 
     public List<ChiTietDonHang> getDanhSachChiTiet() { return danhSachChiTiet; }
     public void setDanhSachChiTiet(List<ChiTietDonHang> danhSachChiTiet) { this.danhSachChiTiet = danhSachChiTiet; }
+
+    public String getPhuongThucThanhToan() { return phuongThucThanhToan; }
+    public void setPhuongThucThanhToan(String phuongThucThanhToan) { this.phuongThucThanhToan = phuongThucThanhToan; }
+
+    public String getGhiChu() { return ghiChu; }
+    public void setGhiChu(String ghiChu) { this.ghiChu = ghiChu; }
 }

@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="16dp"
+    android:layout_marginVertical="8dp"
+    app:cardBackgroundColor="@color/bg_card"
+    app:cardCornerRadius="16dp"
+    app:cardElevation="2dp"
+    app:strokeColor="@color/divider_stroke"
+    app:strokeWidth="1dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="14dp">
+
+        <!-- Ảnh Nông Sản (Glide tải tối ưu 300x300) -->
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/imgHinhAnh"
+            android:layout_width="90dp"
+            android:layout_height="90dp"
+            android:scaleType="centerCrop"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:shapeAppearanceOverlay="@style/ShapeAppearance.MaterialComponents.SmallComponent"
+            tools:src="@android:drawable/ic_menu_gallery" />
+
+        <!-- Badge Danh mục (Nền xanh pastel #E8F5E9) -->
+        <TextView
+            android:id="@+id/tvDanhMuc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:background="@drawable/badge_danh_muc"
+            android:paddingHorizontal="8dp"
+            android:paddingVertical="3dp"
+            android:text="Rau xanh"
+            android:textColor="@color/primary_green"
+            android:textSize="11sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toEndOf="@id/imgHinhAnh"
+            app:layout_constraintTop_toTopOf="@id/imgHinhAnh" />
+
+        <!-- Tên Nông Sản -->
+        <TextView
+            android:id="@+id/tvTenSanPham"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="4dp"
+            android:ellipsize="end"
+            android:maxLines="2"
+            android:text="Cà Chua Beef Hữu Cơ"
+            android:textColor="@color/text_primary"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/imgHinhAnh"
+            app:layout_constraintTop_toBottomOf="@id/tvDanhMuc" />
+
+        <!-- Giá bán & Đơn vị tính (VD: 45.000 đ / hộp 500g) -->
+        <TextView
+            android:id="@+id/tvGia"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="4dp"
+            android:text="45.000 đ / hộp 500g"
+            android:textColor="@color/primary_green"
+            android:textSize="13sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/imgHinhAnh"
+            app:layout_constraintTop_toBottomOf="@id/tvTenSanPham" />
+
+        <!-- Trạng thái còn hàng (Còn hàng / Hết hàng) -->
+        <TextView
+            android:id="@+id/tvTrangThaiTonKho"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="2dp"
+            android:text="Còn hàng (15)"
+            android:textColor="@color/primary_green"
+            android:textSize="12sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/imgHinhAnh"
+            app:layout_constraintTop_toBottomOf="@id/tvGia" />
+
+        <!-- Đường kẻ phân cách hàng nút bấm -->
+        <View
+            android:id="@+id/dividerAction"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="12dp"
+            android:background="@color/divider_stroke"
+            app:layout_constraintTop_toBottomOf="@id/imgHinhAnh" />
+
+        <!-- 3 Nút Hành Động: Xem Mã QR, Chỉnh Sửa, Xóa -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:gravity="end|center_vertical"
+            android:orientation="horizontal"
+            app:layout_constraintTop_toBottomOf="@id/dividerAction">
+
+            <!-- Nút Xem Mã QR -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnXemQR"
+                style="@style/Widget.MaterialComponents.Button.TextButton"
+                android:layout_width="wrap_content"
+                android:layout_height="38dp"
+                android:insetTop="0dp"
+                android:insetBottom="0dp"
+                android:text="Mã QR"
+                android:textColor="@color/primary_green"
+                android:textSize="12sp"
+                app:icon="@drawable/ic_nav_qr"
+                app:iconSize="16dp"
+                app:iconTint="@color/primary_green" />
+
+            <!-- Nút Chỉnh Sửa -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnSua"
+                style="@style/Widget.MaterialComponents.Button.TextButton"
+                android:layout_width="wrap_content"
+                android:layout_height="38dp"
+                android:layout_marginStart="4dp"
+                android:insetTop="0dp"
+                android:insetBottom="0dp"
+                android:text="Sửa"
+                android:textColor="#0288D1"
+                android:textSize="12sp"
+                app:icon="@android:drawable/ic_menu_edit"
+                app:iconSize="16dp"
+                app:iconTint="#0288D1" />
+
+            <!-- Nút Xóa -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnXoa"
+                style="@style/Widget.MaterialComponents.Button.TextButton"
+                android:layout_width="wrap_content"
+                android:layout_height="38dp"
+                android:layout_marginStart="4dp"
+                android:insetTop="0dp"
+                android:insetBottom="0dp"
+                android:text="Xóa"
+                android:textColor="@android:color/holo_red_dark"
+                android:textSize="12sp"
+                app:icon="@android:drawable/ic_menu_delete"
+                app:iconSize="16dp"
+                app:iconTint="@android:color/holo_red_dark" />
+
+        </LinearLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</com.google.android.material.card.MaterialCardView>

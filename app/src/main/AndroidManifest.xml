@@ -8,7 +8,6 @@
 
     <!-- 2. Quyền sử dụng Camera để quét mã QR nguồn gốc nông sản -->
     <uses-permission android:name="android.permission.CAMERA" />
-    <!-- Khai báo phần cứng Camera, đặt required="false" để máy không có camera sau vẫn cài đặt được -->
     <uses-feature
         android:name="android.hardware.camera"
         android:required="false" />
@@ -17,7 +16,9 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
+    <!-- Kích hoạt AgriCleanApplication để bật bộ nhớ đệm Firestore Offline -->
     <application
+        android:name=".AgriCleanApplication"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -27,9 +28,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AGriClean">
 
-        <!-- Màn hình khởi chạy chính của ứng dụng -->
+        <!-- Màn hình Đăng nhập (Điểm khởi chạy ứng dụng) -->
         <activity
-            android:name=".MainActivity"
+            android:name=".ui.auth.DangNhapActivity"
             android:exported="true"
             android:windowSoftInputMode="adjustResize">
             <intent-filter>
@@ -38,9 +39,56 @@
             </intent-filter>
         </activity>
 
+        <!-- Màn hình Đăng ký -->
+        <activity
+            android:name=".ui.auth.DangKyActivity"
+            android:exported="false" />
+
+        <!-- Màn hình chính sau khi đăng nhập thành công (Khách hàng) -->
+        <activity
+            android:name=".MainActivity"
+            android:exported="false" />
+
+        <!-- Màn hình Bảng điều khiển Quản trị viên (Admin) -->
+        <activity
+            android:name=".ui.admin.AdminMainActivity"
+            android:exported="false" />
+
+        <!-- Màn hình Quản lý Sản phẩm dành cho Admin (UC14) -->
+        <activity
+            android:name=".ui.admin.QuanLySanPhamActivity"
+            android:exported="false" />
+
+        <!-- Màn hình Form Thêm và Chỉnh sửa Nông sản Admin (UC14) -->
+        <activity
+            android:name=".ui.admin.ThemSuaSanPhamActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+
+        <!-- Màn hình Quản lý Đơn hàng Nông sản Admin (UC15, UC16) -->
+        <activity
+            android:name=".ui.admin.QuanLyDonHangActivity"
+            android:exported="false" />
+
         <!-- Màn hình quản lý Giỏ hàng nông sản -->
         <activity
             android:name=".ui.customer.GioHangActivity"
+            android:exported="false" />
+
+        <!-- Màn hình Đặt hàng & Thanh toán (UC12) -->
+        <activity
+            android:name=".ui.customer.DatHangActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+
+        <!-- Màn hình Lịch sử Đơn hàng Khách hàng (UC13) -->
+        <activity
+            android:name=".ui.customer.LichSuDonHangActivity"
+            android:exported="false" />
+
+        <!-- Màn hình Chi tiết Nông sản & Nguồn gốc Nhà vườn (UC07, UC08, UC09) -->
+        <activity
+            android:name=".ui.customer.ChiTietSanPhamActivity"
             android:exported="false" />
 
         <!-- Đăng ký Activity quét mã QR của ZXing, cố định hướng màn hình dọc (portrait) -->

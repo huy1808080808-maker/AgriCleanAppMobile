@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="16dp"
+    android:layout_marginVertical="6dp"
+    app:cardBackgroundColor="@color/bg_card"
+    app:cardCornerRadius="16dp"
+    app:cardElevation="0dp"
+    app:strokeColor="@color/border_card"
+    app:strokeWidth="1dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <!-- HEADER ĐƠN HÀNG: MÃ ĐƠN & BADGE TRẠNG THÁI -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tvMaDonHang"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:fontFamily="sans-serif-bold"
+                android:textColor="@color/text_primary"
+                android:textSize="15sp"
+                tools:text="#DH1730537000" />
+
+            <!-- Huy hiệu Badge Trạng thái đơn -->
+            <TextView
+                android:id="@+id/tvTrangThai"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_badge_status_orange"
+                android:fontFamily="sans-serif-medium"
+                android:paddingHorizontal="10dp"
+                android:paddingVertical="4dp"
+                android:textColor="@color/accent_orange"
+                android:textSize="12sp"
+                tools:text="Chờ duyệt" />
+        </LinearLayout>
+
+        <!-- THỜI GIAN ĐẶT HÀNG -->
+        <TextView
+            android:id="@+id/tvNgayDat"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:textColor="@color/text_secondary"
+            android:textSize="12sp"
+            tools:text="14:30 - 02/11/2026" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginVertical="10dp"
+            android:background="@color/border_card" />
+
+        <!-- THÔNG TIN NGƯỜI NHẬN -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Khách hàng: "
+                android:textColor="@color/text_secondary"
+                android:textSize="13sp" />
+
+            <TextView
+                android:id="@+id/tvTenKhachHang"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-medium"
+                android:textColor="@color/text_primary"
+                android:textSize="13sp"
+                tools:text="Nguyễn Văn A" />
+
+            <TextView
+                android:id="@+id/tvSoDienThoai"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:textColor="@color/primary_green"
+                android:textSize="13sp"
+                tools:text="(0912345678)" />
+        </LinearLayout>
+
+        <!-- ĐỊA CHỈ GIAO HÀNG -->
+        <TextView
+            android:id="@+id/tvDiaChiGiaoHang"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:ellipsize="end"
+            android:maxLines="2"
+            android:textColor="@color/text_secondary"
+            android:textSize="12sp"
+            tools:text="Địa chỉ: 123 Đường Nguyễn Huệ, P. Bến Nghé, Quận 1, TP.HCM" />
+
+        <!-- GHI CHÚ (NẾU CÓ) -->
+        <TextView
+            android:id="@+id/tvGhiChu"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:fontFamily="sans-serif"
+            android:textColor="@color/accent_orange"
+            android:textSize="12sp"
+            android:visibility="gone"
+            tools:text="Ghi chú: Giao giờ hành chính giúp em"
+            tools:visibility="visible" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginVertical="10dp"
+            android:background="@color/border_card" />
+
+        <!-- TÓM TẮT SẢN PHẨM MUA -->
+        <TextView
+            android:id="@+id/tvDanhSachMon"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:lineSpacingExtra="3dp"
+            android:textColor="@color/text_primary"
+            android:textSize="13sp"
+            tools:text="• Cà chua Beef Đà Lạt (x2)\n• Rau xà lách thủy canh (x1)" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginVertical="10dp"
+            android:background="@color/border_card" />
+
+        <!-- FOOTER: PHƯƠNG THỨC, TỔNG TIỀN VÀ NÚT DUYỆT ĐƠN -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tvPhuongThuc"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/text_hint"
+                    android:textSize="12sp"
+                    tools:text="COD" />
+
+                <TextView
+                    android:id="@+id/tvTongTien"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:fontFamily="sans-serif-bold"
+                    android:textColor="@color/primary_green"
+                    android:textSize="16sp"
+                    tools:text="135.000 đ" />
+            </LinearLayout>
+
+            <!-- Nút Cập nhật trạng thái đơn (UC16) -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnCapNhatTrangThai"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:fontFamily="sans-serif-medium"
+                android:paddingHorizontal="14dp"
+                android:text="Cập nhật trạng thái"
+                android:textAllCaps="false"
+                android:textColor="@color/primary_green"
+                android:textSize="12sp"
+                app:cornerRadius="20dp"
+                app:strokeColor="@color/primary_green"
+                app:strokeWidth="1dp" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</com.google.android.material.card.MaterialCardView>
+
