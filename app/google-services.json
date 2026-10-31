@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "275062170569",
+    "project_id": "agriclean-9c894",
+    "storage_bucket": "agriclean-9c894.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:275062170569:android:2c7af00ecba2f713c1be18",
+        "android_client_info": {
+          "package_name": "com.example.agriclean"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB1SZwrRHA0fL_Wbsh9u5WWcsK5uGTEYNM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

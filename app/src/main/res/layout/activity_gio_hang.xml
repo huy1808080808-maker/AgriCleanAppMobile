@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Giao diện màn hình Giỏ hàng Nông sản (ActivityGioHangBinding) -->
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp">
+
+    <!-- Tiêu đề màn hình giỏ hàng -->
+    <TextView
+        android:id="@+id/tvTieuDe"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Giỏ Hàng Nông Sản Sạch"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:textColor="@android:color/black"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!-- Nút xóa sạch toàn bộ giỏ hàng -->
+    <Button
+        android:id="@+id/btnXoaHet"
+        style="@style/Widget.Material3.Button.TextButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Xóa tất cả"
+        android:textColor="@android:color/holo_red_dark"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!-- Danh sách hiển thị các sản phẩm trong giỏ -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvDanhSachGioHang"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginVertical="12dp"
+        app:layout_constraintBottom_toTopOf="@id/layoutTienIch"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvTieuDe" />
+
+    <!-- Hàng nút tiện ích: Quét mã QR & Xem vị trí trang trại trên bản đồ -->
+    <LinearLayout
+        android:id="@+id/layoutTienIch"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginBottom="12dp"
+        app:layout_constraintBottom_toTopOf="@id/tvTongTien"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <!-- Nút bật Camera quét mã QR nguồn gốc -->
+        <Button
+            android:id="@+id/btnQuetQR"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginEnd="6dp"
+            android:text="Quét Mã QR" />
+
+        <!-- Nút mở Google Maps chỉ đường đến nông trại -->
+        <Button
+            android:id="@+id/btnXemTrangTrai"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginStart="6dp"
+            android:text="Xem Nông Trại" />
+    </LinearLayout>
+
+    <!-- Nhãn hiển thị tổng tiền cần thanh toán -->
+    <TextView
+        android:id="@+id/tvTongTien"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Tổng: 0 đ"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:textColor="@android:color/holo_red_dark"
+        app:layout_constraintBottom_toBottomOf="@id/btnDatHang"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/btnDatHang" />
+
+    <!-- Nút xác nhận Đặt hàng -->
+    <Button
+        android:id="@+id/btnDatHang"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Đặt Hàng"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+
