@@ -119,24 +119,20 @@ public class DatHangActivity extends AppCompatActivity {
         gioHangViewModel.getDanhSachGioHang().observe(this, danhSach -> {
             if (daXacNhanDatHang) return; // Nếu vừa đặt hàng thành công và đang xóa giỏ thì bỏ qua
 
-            if (danhSach == null || danhSach.isEmpty()) {
-                Toast.makeText(this, "Giỏ hàng hiện tại đang trống!", Toast.LENGTH_SHORT).show();
-                finish();
-                return;
+            if (danhSach != null && !danhSach.isEmpty()) {
+                this.danhSachHienTai = danhSach;
+                tomTatAdapter.capNhatDanhSach(danhSach);
+
+                double tong = 0.0;
+                for (GioHangItem item : danhSach) {
+                    tong += (item.getGiaBan() * item.getSoLuong());
+                }
+                this.tongTienDonHang = tong;
+
+                String tongTienStr = formatter.format(tong) + " đ";
+                binding.tvTamTinh.setText(tongTienStr);
+                binding.tvTongTien.setText(tongTienStr);
             }
-
-            this.danhSachHienTai = danhSach;
-            tomTatAdapter.capNhatDanhSach(danhSach);
-
-            double tong = 0.0;
-            for (GioHangItem item : danhSach) {
-                tong += (item.getGiaBan() * item.getSoLuong());
-            }
-            this.tongTienDonHang = tong;
-
-            String tongTienStr = formatter.format(tong) + " đ";
-            binding.tvTamTinh.setText(tongTienStr);
-            binding.tvTongTien.setText(tongTienStr);
         });
 
         // Lắng nghe trạng thái loading

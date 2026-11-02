@@ -38,9 +38,44 @@
             </intent-filter>
         </activity>
 
-        <!-- Màn hình quản lý Giỏ hàng nông sản -->
+        <!-- Nhóm màn hình Xác thực người dùng (Auth) -->
+        <activity
+            android:name=".ui.auth.DangNhapActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".ui.auth.DangKyActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+
+        <!-- Nhóm màn hình Quản trị viên (Admin) -->
+        <activity
+            android:name=".ui.admin.AdminMainActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.admin.QuanLySanPhamActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.admin.ThemSuaSanPhamActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".ui.admin.QuanLyDonHangActivity"
+            android:exported="false" />
+
+        <!-- Nhóm màn hình Khách hàng (Customer) -->
+        <activity
+            android:name=".ui.customer.ChiTietSanPhamActivity"
+            android:exported="false" />
         <activity
             android:name=".ui.customer.GioHangActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.customer.DatHangActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".ui.customer.LichSuDonHangActivity"
             android:exported="false" />
 
         <!-- Đăng ký Activity quét mã QR của ZXing, cố định hướng màn hình dọc (portrait) -->
