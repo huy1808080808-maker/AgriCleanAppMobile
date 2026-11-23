@@ -87,16 +87,77 @@ public class SanPhamViewModel extends ViewModel {
         }
 
         List<SanPham> ketQua = new ArrayList<>();
+
+        // Danh sách các thể loại và các từ khóa nhận diện
+        String[] danhMucTuKhoa = {SanPham.DANH_MUC_RAU_XANH, SanPham.DANH_MUC_CU_QUA,
+                SanPham.DANH_MUC_TRAI_CAY, SanPham.DANH_MUC_NAM};
+
+        // Xác định xem từ khóa tìm kiếm có khớp với thể loại hay không
+        boolean tuKhoaLaTheLoai = false;
+        String danhMucTimDuoc = null;
+        String lowerKeyword = tuKhoaHienTai.toLowerCase().trim();
+
+        // Nếu từ khóa tìm kiếm rỗng thì không tự động lọc thể loại, giữ nguyên behavior cũ
+        if (tuKhoaHienTai.isEmpty()) {
+            tuKhoaLaTheLoai = false;
+        } else {
+            // Danh sách các từ cần check (tách bằng space)
+            String[] tuKhoaWords = lowerKeyword.split("\\s+");
+
+            for (String tenDanhMuc : danhMucTuKhoa) {
+                String tenDanhMucLower = tenDanhMuc.toLowerCase();
+                boolean khoc = false;
+
+                // 1. Check từ khóa hoàn thể (gõ "củ quả" -> check "củ quả" ở "củ quả")
+                if (tenDanhMucLower.contains(lowerKeyword) || lowerKeyword.contains(tenDanhMucLower) || tenDanhMucLower.equals(lowerKeyword)) {
+                    khoc = true;
+                }
+                // 2. Check từng từ con (gõ "rau" khớp "Rau xanh", gõ "củ quả" check "củ" và "quả" riêng lẻ)
+                else {
+                    for (String tu : tuKhoaWords) {
+                        if (!tu.isEmpty() && tenDanhMucLower.contains(tu)) {
+                            khoc = true;
+                            break;
+                        }
+                    }
+                }
+
+                if (khoc) {
+                    tuKhoaLaTheLoai = true;
+                    danhMucTimDuoc = tenDanhMuc;
+                    break;
+                }
+            }
+        }
+
         for (SanPham sp : goc) {
+            // Xác định xem có khớp danh mục hiện tại (từ nút filter) hay không
             boolean khopDanhMuc = danhMucHienTai.equals(SanPham.DANH_MUC_TAT_CA)
                     || (sp.getDanhMuc() != null && sp.getDanhMuc().equalsIgnoreCase(danhMucHienTai));
 
-            boolean khopTuKhoa = tuKhoaHienTai.isEmpty()
-                    || (sp.getTenSanPham() != null && sp.getTenSanPham().toLowerCase().contains(tuKhoaHienTai))
-                    || (sp.getTenTrangTrai() != null && sp.getTenTrangTrai().toLowerCase().contains(tuKhoaHienTai));
+            // Nếu từ khóa tìm kiếm là thể loại (ví dụ: "rau củ", "củ quả", "trái cây", "nấm")
+            if (tuKhoaLaTheLoai && danhMucTimDuoc != null) {
+                // Chỉ áp dụng filter theo thể loại tìm được,
+                // không cần product name/farm match nữa - thể loại đã đủ điều kiện
+                khopDanhMuc = sp.getDanhMuc() != null && sp.getDanhMuc().equalsIgnoreCase(danhMucTimDuoc);
+                if (khopDanhMuc) {
+                    ketQua.add(sp);
+                }
+            } else {
+                // Trường hợp bình thường: search theo tên + filter danh mục hiện tại
+                boolean khopTen = sp.getTenSanPham() != null
+                        && sp.getTenSanPham().toLowerCase().contains(tuKhoaHienTai);
+                boolean khopFarm = sp.getTenTrangTrai() != null
+                        && sp.getTenTrangTrai().toLowerCase().contains(tuKhoaHienTai);
 
-            if (khopDanhMuc && khopTuKhoa) {
-                ketQua.add(sp);
+                // Logic filter danh mục: nếu đang là "Tất cả" thì không filter, ngược lại áp dụng
+                boolean khopDanhMucHienTai = khopDanhMuc
+                        && (danhMucHienTai.equals(SanPham.DANH_MUC_TAT_CA)
+                        || (sp.getDanhMuc() != null && sp.getDanhMuc().equalsIgnoreCase(danhMucHienTai)));
+
+                if (khopDanhMucHienTai && (khopTen || khopFarm)) {
+                    ketQua.add(sp);
+                }
             }
         }
         danhSachHienThiLiveData.setValue(ketQua);
