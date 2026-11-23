@@ -6,6 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/bg_screen"
+    android:fitsSystemWindows="true"
     tools:context=".MainActivity">
 
     <!-- 1. Header Khu vực Khách hàng -->
@@ -260,12 +261,11 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginTop="10dp"
-        android:clipToPadding="false"
+        android:clipToPadding="true"
         android:paddingHorizontal="12dp"
-        android:paddingBottom="12dp"
         app:layout_constraintBottom_toTopOf="@id/bottomNav"
         app:layout_constraintTop_toBottomOf="@id/hsvDanhMuc"
-        tools:listitem="@layout/item_san_pham" />
+        tools:listitem="@layout/item_san_pham_customer" />
 
     <ProgressBar
         android:id="@+id/pbLoading"
@@ -292,15 +292,16 @@
         app:layout_constraintTop_toBottomOf="@id/hsvDanhMuc" />
 
     <!-- 5. Thanh Điều Hướng Đáy (Bottom Navigation - Bước 7) -->
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/bottomNav"
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:background="@color/bg_card"
-        app:elevation="8dp"
-        app:itemIconTint="@color/primary_green"
-        app:itemTextColor="@color/primary_green"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:menu="@menu/bottom_nav_menu" />
+<com.google.android.material.bottomnavigation.BottomNavigationView
+    android:id="@+id/bottomNav"
+    android:layout_width="match_parent"
+    android:layout_height="60dp"
+    android:background="@color/bg_card"
+    android:fitsSystemWindows="true"
+    app:elevation="8dp"
+    app:itemIconTint="@color/primary_green"
+    app:itemTextColor="@color/primary_green"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:menu="@menu/bottom_nav_menu" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
